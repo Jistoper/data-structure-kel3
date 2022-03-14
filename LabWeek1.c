@@ -6,6 +6,13 @@
 #include <time.h>
 #include <windows.h>
 
+/**
+ * TUGAS LAB SESI 1
+ * 2501993964 - Mario Gracius K.L
+ * 2501980305 - Jonathan Apriliano Saputra B
+ * 2501960814 - Augustinus Adrian Triputra
+ */
+
 void clear() { system("CLS"); }
 
 void delay(float number_of_seconds) {
