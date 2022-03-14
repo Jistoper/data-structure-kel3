@@ -83,7 +83,7 @@ void addstock() {
     printf("\nInput Doll Code [ 5 chars ]: ");
     scanf("%s", doll_code);
 
-    for (i = 0; i < 7; i++) {
+    for (i = 0; i < sizeof(arr_item) / sizeof(arr_item[0]); i++) {
       if (strcmp(doll_code, arr_item[i].code) == 0) {
         marker = 1;
         break;
@@ -199,12 +199,13 @@ int main() {
 
       case 3:
         printf("Exiting Program...\n");
-        Sleep(1000);
+        delay(1);
         exit(0);
         break;
 
       default:
         printf("Pilihan anda salah!");
+        delay(1.5);
         break;
     }
   }
