@@ -31,7 +31,7 @@ struct Node* pushHead(struct Node* head, struct Node data)
 		strcpy(newNode->doll_name,data.doll_name);
 		newNode->quantity = data.quantity;
 		newNode->price = data.price;
-		newNode->next = NULL;
+		newNode->next = head;
 		
 		head = newNode;
 	}
@@ -73,10 +73,9 @@ void viewData(struct Node* head) {
 int main() {
   int pilih;
   int choice;
-  struct Node data;
   struct Node* head;
   head = NULL;
-	start:
+	do{
   printf("Menu\n");
   printf("1. Sell\n");
   printf("2. Add Stock\n");
@@ -88,7 +87,8 @@ int main() {
   switch (pilih) {
     case 1:
       break;
-    case 2:
+    case 2:{
+    	struct Node data;
 	system("cls");
 	printf("Input Choice\n");
 	printf("1.Push Data at Head\n");
@@ -114,13 +114,11 @@ int main() {
 		break;
 	}
       system("cls");
-      goto start;
-      break;
+      break;}
     case 3:
     viewData(head);
     getch();
     system("cls");
-    goto start;
     break;
     case 4:
       printf("Exiting program...");
@@ -130,10 +128,14 @@ int main() {
 		printf("Press Enter to continue");
 		getch();
       break;
+      return 0;
     default:
+    	system("cls");
       printf("Menu not available\n");
       getch();
+      system("cls");
       break;
   }
+  	}while(pilih!=4);
   return 0;
 }
