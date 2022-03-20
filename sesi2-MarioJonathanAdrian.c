@@ -38,6 +38,31 @@ struct Node* pushHead(struct Node* head, struct Node data)
 	return head;
 }
 
+struct Node* popTail(struct Node* head)
+{
+	struct Node *ptr;
+	ptr = head;
+	if(head == NULL)
+	{
+		printf("No Data to Delete!");
+		return head;
+	}
+	if(head->next == NULL)
+	{
+		printf("data %s telah dihapus", head->code);
+		free(head);
+		head = NULL;
+	}
+	else
+	{		
+		while(ptr->next->next != NULL)
+			ptr = ptr->next;
+		
+		printf("data %s telah dihapus", ptr->next->code);
+		free(ptr->next);
+		ptr->next = NULL;
+	}
+}
 
 void viewData(struct Node* head) {
 		struct Node* ptr;
@@ -72,7 +97,6 @@ void viewData(struct Node* head) {
 
 int main() {
   int pilih;
-  int choice;
   struct Node* head;
   head = NULL;
 	do{
@@ -80,8 +104,8 @@ int main() {
   printf("1. Sell\n");
   printf("2. Add Stock\n");
   printf("3. View Data\n");
-  printf("3. Remove Stock\n");
-  printf("4. Exit\n");
+  printf("4. Remove Stock\n");
+  printf("5. Exit\n");
   printf("Pilihan : ");
   scanf("%d", &pilih);
   switch (pilih) {
@@ -89,6 +113,7 @@ int main() {
       break;
     case 2:{
     	struct Node data;
+    	int choice;
 	system("cls");
 	printf("Input Choice\n");
 	printf("1.Push Data at Head\n");
@@ -97,13 +122,13 @@ int main() {
 	scanf("%d",&choice);
 	system("cls");
 	printf("Input Doll Code [5 chars]:");
-	scanf("%s",data.code);
+	scanf("%s",data.code);getchar();
 	printf("Input Doll Name:");
-	scanf("%s",data.doll_name);
+	scanf("%[^\n]",data.doll_name);getchar();
 	printf("Input Doll Quantity:");
-	scanf("%d",&data.quantity);
+	scanf("%d",&data.quantity);getchar();
 	printf("Input Doll Price:");
-	scanf("%d",&data.price);
+	scanf("%d",&data.price);getchar();
 	if(choice == 1){
 		head = pushHead(head,data);
 	}
@@ -120,7 +145,29 @@ int main() {
     getch();
     system("cls");
     break;
-    case 4:
+    
+    case 4:{
+    int choice;
+	system("cls");
+	printf("Input Choice\n");
+	printf("1.Pop Data at Head\n");
+	printf("2.Pop Data at Tail\n");
+	printf("Choice:");
+	scanf("%d",&choice);
+		if(choice == 1){
+		break;
+	}
+	else if(choice == 2){
+		head = popTail(head);
+	}
+	else{
+		break;
+	}
+	getch();
+	system("cls");
+	break;
+	}
+    case 5:
       printf("Exiting program...");
       sleep(3);
       system("cls");
@@ -136,6 +183,5 @@ int main() {
       system("cls");
       break;
   }
-  	}while(pilih!=4);
-  return 0;
+  	}while(pilih!=5);
 }
