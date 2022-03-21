@@ -8,9 +8,8 @@
 
 void viewData();
 void menu();
-struct Node* head;
-void clear() { system("cls"); }
 
+void clear() { system("cls"); }
 void delay(int number_of_seconds) {
   int milli_seconds = 1000 * number_of_seconds;
 
@@ -27,6 +26,7 @@ struct Node {
   int price;
   struct Node* next;
 };
+struct Node* head;
 
 int getCount(struct Node* head) {
   int count = 0;
@@ -73,7 +73,7 @@ struct Node* pushTail(struct Node* head, struct Node data) {
   return head;
 }
 struct Node* pushSomewhere(struct Node* head, struct Node data, int pil) {
-  struct Node *ptr, *temp;
+  struct Node *ptr, *praptr;
   ptr = head;
   struct Node* newNode;
   newNode = (struct Node*)malloc(sizeof(struct Node));
@@ -82,9 +82,9 @@ struct Node* pushSomewhere(struct Node* head, struct Node data, int pil) {
   newNode->quantity = data.quantity;
   newNode->price = data.price;
   for (int i = 0; i < pil - 2; i++) ptr = ptr->next;
-  temp = ptr->next;
+  praptr = ptr->next;
   ptr->next = newNode;
-  newNode->next = temp;
+  newNode->next = praptr;
   return head;
 }
 
@@ -301,8 +301,8 @@ void sell() {
         " Code  |            Doll Name           | Available | Price      "
         "  "
         "\n");
-    printf(" %.5s | %-30s | %-3.d       | Rp. %d,-\n", ptr->code,
-           ptr->doll_name, ptr->quantity, ptr->price);
+    printf(" %.5s | %-30s | %-9.d | Rp. %d,-\n", ptr->code, ptr->doll_name,
+           ptr->quantity, ptr->price);
     printf("Input quantity: ");
     scanf("%d", &quantity);
     if (quantity < 1 || quantity > ptr->quantity) {
@@ -432,6 +432,7 @@ void menu() {
   } while (pilih != 4);
 }
 int main() {
+  clear();
   head = NULL;
   printf("Welcome to our program\n\n");
   printf("Loading data");
@@ -446,17 +447,17 @@ int main() {
 /*
 2 2 2
 DL003
-wefwefwef
-120
-10
-2 2 2
-DL004
-wefwefwef
-120
-100
+kangaroo Teddy Bear
+25
+60000
 2 2 2
 DL005
-wefwefwef
-120
-1000
+Lil Benny Phant
+40
+110000
+2 2 2
+DL006
+Cute Baby Shark
+29
+130000
 */
