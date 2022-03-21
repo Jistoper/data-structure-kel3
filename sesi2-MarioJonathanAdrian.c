@@ -27,49 +27,49 @@ struct Node {
   struct Node* next;
 };
 
-struct Node* pushHead(struct Node* head, struct Node data) {
-  if (head == NULL) {
-    head = (struct Node*)malloc(sizeof(struct Node));
-    strcpy(head->code, data.code);
-    strcpy(head->doll_name, data.doll_name);
-    head->quantity = data.quantity;
-    head->price = data.price;
-    head->next = NULL;
-  } else {
-    struct Node* newNode;
-    newNode = (struct Node*)malloc(sizeof(struct Node));
-    strcpy(newNode->code, data.code);
-    strcpy(newNode->doll_name, data.doll_name);
-    newNode->quantity = data.quantity;
-    newNode->price = data.price;
-    newNode->next = head;
-
-    head = newNode;
+int getCount(struct Node* head) {
+  int count = 0;
+  struct Node* current = head;
+  while (current != NULL) {
+    count++;
+    current = current->next;
   }
+  return count;
+}
+
+struct Node* initNode(struct Node* head, struct Node data) {
+  head = (struct Node*)malloc(sizeof(struct Node));
+  strcpy(head->code, data.code);
+  strcpy(head->doll_name, data.doll_name);
+  head->quantity = data.quantity;
+  head->price = data.price;
+  head->next = NULL;
+  return head;
+}
+struct Node* pushHead(struct Node* head, struct Node data) {
+  struct Node* newNode;
+  newNode = (struct Node*)malloc(sizeof(struct Node));
+  strcpy(newNode->code, data.code);
+  strcpy(newNode->doll_name, data.doll_name);
+  newNode->quantity = data.quantity;
+  newNode->price = data.price;
+  newNode->next = head;
+  head = newNode;
   return head;
 }
 struct Node* pushTail(struct Node* head, struct Node data) {
-  struct Node* ptr = head;
-  if (head == NULL) {
-    head = (struct Node*)malloc(sizeof(struct Node));
-    strcpy(head->code, data.code);
-    strcpy(head->doll_name, data.doll_name);
-    head->quantity = data.quantity;
-    head->price = data.price;
-    head->next = NULL;
-    return head;
-  } else {
-    struct Node* newNode;
-    newNode = (struct Node*)malloc(sizeof(struct Node));
-    strcpy(newNode->code, data.code);
-    strcpy(newNode->doll_name, data.doll_name);
-    newNode->quantity = data.quantity;
-    newNode->price = data.price;
-    newNode->next = NULL;
-    while (ptr->next->next != NULL) ptr = ptr->next;
-    ptr->next = newNode;
-    return head;
-  }
+  struct Node* ptr;
+  ptr = head;
+  struct Node* newNode;
+  newNode = (struct Node*)malloc(sizeof(struct Node));
+  strcpy(newNode->code, data.code);
+  strcpy(newNode->doll_name, data.doll_name);
+  newNode->quantity = data.quantity;
+  newNode->price = data.price;
+  while (ptr->next != NULL) ptr = ptr->next;
+  ptr->next = newNode;
+  newNode->next = NULL;
+  return head;
 }
 
 struct Node* popTail(struct Node* head) {
@@ -136,11 +136,15 @@ void addstock() {
   printf("Input Doll Price: ");
   scanf("%d", &data.price);
   getchar();
-  if (choice == 1) {
-    head = pushHead(head, data);
-  } else if (choice == 2) {
-    head = pushTail(head, data);
-  } else {
+  if (head == NULL)
+    head = initNode(head, data);
+  else {
+    if (choice == 1) {
+      head = pushHead(head, data);
+    } else if (choice == 2) {
+      head = pushTail(head, data);
+    } else {
+    }
   }
   system("cls");
 }
@@ -206,6 +210,7 @@ void viewData(struct Node* head) {
     printf("Data not available");
   else {
     int i = 0;
+    printf("%d data available\n", getCount(head));
     printf(
         "No. | Code  |            Doll Name           | Available | Price      "
         "  "
