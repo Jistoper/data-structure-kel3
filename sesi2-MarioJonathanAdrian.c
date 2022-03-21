@@ -6,7 +6,8 @@
 #include <unistd.h>
 #include <windows.h>
 
-void addstock();
+void viewData();
+void menu();
 struct Node* head;
 void clear() { system("cls"); }
 void delay(int number_of_seconds) {
@@ -113,6 +114,90 @@ struct Node* popHeaad(struct Node* head) {
 }
 struct Node* popsomething(struct Node* head, int x) {}
 
+void addstock() {
+  struct Node data;
+  int choice;
+  system("cls");
+  printf("Input Choice\n");
+  printf("1.Push Data at Head\n");
+  printf("2.Push Data at Tail\n");
+  printf("Choice: ");
+  scanf("%d", &choice);
+  system("cls");
+  printf("Input Doll Code [5 chars]: ");
+  scanf("%s", data.code);
+  getchar();
+  printf("Input Doll Name: ");
+  scanf("%[^\n]", data.doll_name);
+  getchar();
+  printf("Input Doll Quantity: ");
+  scanf("%d", &data.quantity);
+  getchar();
+  printf("Input Doll Price: ");
+  scanf("%d", &data.price);
+  getchar();
+  if (choice == 1) {
+    head = pushHead(head, data);
+  } else if (choice == 2) {
+    head = pushTail(head, data);
+  } else {
+  }
+  system("cls");
+}
+void sell() {
+  struct Node* ptr;
+  int check = 0, quantity = 0, total = 0;
+  char doll_code[5];
+
+  while (check != 1) {
+    clear();
+    ptr = head;
+    viewData(head);
+    printf("\nInput Doll Code [5 chars]: ");
+    scanf("%s", doll_code);
+    while (ptr != NULL) {
+      if (strcmp(doll_code, ptr->code) == 0) {
+        check = 1;
+        break;
+      }
+      ptr = ptr->next;
+    }
+    if (check == 0) {
+      printf("\n--Doll code doesn't exist--");
+      delay(2);
+      clear();
+    }
+  }
+
+  clear();
+  while (check != 2) {
+    printf(
+        " Code  |            Doll Name           | Available | Price      "
+        "  "
+        "\n");
+    printf(" %.5s | %-30s | %-3.d       | Rp. %d,-\n", ptr->code,
+           ptr->doll_name, ptr->quantity, ptr->price);
+    printf("Input quantity: ");
+    scanf("%d", &quantity);
+    if (quantity < 1 || quantity > ptr->quantity) {
+      printf("\n--Quantity must be more than 0 and not more than stock--");
+      delay(2);
+      clear();
+    } else {
+      check = 2;
+    }
+  }
+
+  clear();
+  total = ptr->price * quantity;
+  printf("\nYour total spending is Rp. %d,-\n", total);
+  printf("\n--Press Enter to Continue--");
+  ptr->quantity -= quantity;
+  getch();
+  clear();
+  menu();
+}
+
 void viewData(struct Node* head) {
   struct Node* ptr;
   ptr = head;
@@ -135,10 +220,9 @@ void viewData(struct Node* head) {
   }
 }
 
-int menu() {
+void menu() {
   int pilih;
-  // struct Node* head;
-  // head = NULL;
+  viewData(head);
   do {
     system("cls");
     viewData(head);
@@ -151,6 +235,7 @@ int menu() {
     scanf("%d", &pilih);
     switch (pilih) {
       case 1:
+        sell();
         break;
       case 2:
         addstock();
@@ -183,8 +268,8 @@ int menu() {
         printf("\n\nThank you for trying!!!\n\n");
         printf("Press Enter to continue");
         getch();
+        return;
         break;
-        return 0;
       default:
         system("cls");
         printf("Menu not available\n");
@@ -195,42 +280,9 @@ int menu() {
   } while (pilih != 4);
 }
 
-void addstock() {
-  struct Node data;
-  int choice;
-  system("cls");
-  printf("Input Choice\n");
-  printf("1.Push Data at Head\n");
-  printf("2.Push Data at Tail\n");
-  printf("Choice: ");
-  scanf("%d", &choice);
-  system("cls");
-  printf("Input Doll Code [5 chars]: ");
-  scanf("%s", data.code);
-  getchar();
-  printf("Input Doll Name: ");
-  scanf("%[^\n]", data.doll_name);
-  getchar();
-  printf("Input Doll Quantity: ");
-  scanf("%d", &data.quantity);
-  getchar();
-  printf("Input Doll Price: ");
-  scanf("%d", &data.price);
-  getchar();
-  if (choice == 1) {
-    head = pushHead(head, data);
-  } else if (choice == 2) {
-    head = pushTail(head, data);
-  } else {
-  }
-  system("cls");
-}
-
 int main() {
-  // head = NULL;
   head = NULL;
   printf("Welcome to our program\n\n");
-  // delay(2);
   printf("Loading data");
   for (int i = 0; i < 3; i++) {
     printf(".");
