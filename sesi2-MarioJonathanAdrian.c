@@ -215,9 +215,9 @@ void addstock() {
     viewData(head);
     int pil = 0;
     if (choice == 3) {
-      printf("Input Index to be Inserted:");
+      printf("\nInput Index to be Inserted:");
       scanf("%d", &pil);
-      if ((pil < 1) || pil > getCount(head)) {
+      if ((pil < 1) || pil > getCount(head) + 1) {
         printf("invalid input");
         getch();
         return;
@@ -241,10 +241,13 @@ void addstock() {
     else {
       if (choice == 1 || pil == 1) {
         head = pushHead(head, data);
-      } else if (choice == 2 || pil == getCount(head)) {
+      } else if (choice == 2 || pil == (getCount(head) + 1)) {
         head = pushTail(head, data);
       } else if (choice == 3) {
-        head = pushSomewhere(head, data, pil);
+        if ((choice < 1) || choice > (getCount(head) + 1)) {
+          printf("Invalid Input!\n");
+        } else
+          head = pushSomewhere(head, data, pil);
       }
       printf("\nAdding Success!");
     }
@@ -408,8 +411,11 @@ void menu() {
         break;
 
       case 4:
-        printf("Exiting program...");
-        sleep(3);
+        printf("Exiting program\n");
+        for (int i = 0; i < 4; i++) {
+          printf(".");
+          sleep(1);
+        }
         system("cls");
         printf("\n\nThank you for trying!!!\n\n");
         printf("Press Enter to continue");
@@ -442,15 +448,15 @@ int main() {
 DL003
 wefwefwef
 120
-10000
+10
 2 2 2
 DL004
 wefwefwef
 120
-10000
+100
 2 2 2
 DL005
 wefwefwef
 120
-10000
+1000
 */
