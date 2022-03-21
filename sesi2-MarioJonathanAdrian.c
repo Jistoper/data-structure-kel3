@@ -10,6 +10,7 @@ void viewData();
 void menu();
 struct Node* head;
 void clear() { system("cls"); }
+
 void delay(int number_of_seconds) {
   int milli_seconds = 1000 * number_of_seconds;
 
@@ -71,7 +72,7 @@ struct Node* pushTail(struct Node* head, struct Node data) {
   newNode->next = NULL;
   return head;
 }
-struct NOde* pushSomewhere(struct Node* head, struct Node data, int pil) {
+struct Node* pushSomewhere(struct Node* head, struct Node data, int pil) {
   struct Node *ptr, *temp;
   ptr = head;
   struct Node* newNode;
@@ -94,17 +95,19 @@ struct Node* popTail(struct Node* head) {
     printf("data %s telah dihapus", head->code);
     free(head);
     head = NULL;
+    getch();
   } else {
     while (ptr->next->next != NULL) ptr = ptr->next;
 
     printf("data %s telah dihapus", ptr->next->code);
     free(ptr->next);
     ptr->next = NULL;
+    getch();
   }
   getch();
   return head;
 }
-struct Node* popHeaad(struct Node* head) {
+struct Node* popHead(struct Node* head) {
   struct Node* ptr;
   ptr = head;
   if (head->next == NULL) {
@@ -117,7 +120,24 @@ struct Node* popHeaad(struct Node* head) {
   }
   return head;
 }
-struct Node* popSomewhere(struct Node* head, int x) {}
+struct Node* popSomewhere(struct Node* head, int x) {
+  struct Node *ptr, *tmp;
+  ptr = head;
+  if (head->next == NULL) {
+    printf("data %s telah dihapus", head->code);
+    free(head);
+    head = NULL;
+  } else {
+    for (int i = 0; i < x - 2; i++) ptr = ptr->next;
+
+    printf("data %s telah dihapus", ptr->next->code);
+    tmp = ptr->next->next;
+    free(ptr->next);
+    ptr->next = tmp;
+  }
+  getch();
+  return head;
+}
 
 void addstock() {
   struct Node data;
@@ -172,19 +192,28 @@ void sell() {
     clear();
     ptr = head;
     viewData(head);
-    printf("\nInput Doll Code [5 chars]: ");
-    scanf("%s", doll_code);
-    while (ptr != NULL) {
-      if (strcmp(doll_code, ptr->code) == 0) {
-        check = 1;
-        break;
+    if (ptr != NULL) {
+      printf("\nInput Doll Code [5 chars]: ");
+      scanf("%s", doll_code);
+      while (ptr != NULL) {
+        if (strcmp(doll_code, ptr->code) == 0) {
+          check = 1;
+          break;
+        }
+        ptr = ptr->next;
       }
-      ptr = ptr->next;
-    }
-    if (check == 0) {
-      printf("\n--Doll code doesn't exist--");
-      delay(2);
-      clear();
+      if (check == 0) {
+        printf("\n--Doll code doesn't exist--");
+        delay(2);
+        clear();
+      }
+    } else {
+      system("cls");
+      printf("\n\nData doesn't exist\n\n");
+      printf("Press Enter to Continue");
+      getch();
+      system("cls");
+      menu();
     }
   }
 
@@ -216,7 +245,45 @@ void sell() {
   clear();
   menu();
 }
-
+void removestock() {
+  if (head == NULL) {
+    printf("No Data to Delete!");
+    getch();
+  } else {
+    int choice;
+    system("cls");
+    printf("Input Choice\n");
+    printf("1.Pop Data at Head\n");
+    printf("2.Pop Data at Tail\n");
+    printf("3.Pop Somewhere\n");
+    printf("Choice:");
+    scanf("%d", &choice);
+    if (choice == 1) {
+      head = popHead(head);
+      return;
+    } else if (choice == 2) {
+      head = popTail(head);
+    } else if (choice == 3) {
+      clear();
+      viewData(head);
+      int pil;
+      printf("\nInput Index to be deleted: ");
+      scanf("%d", &pil);
+      if (pil == 1)
+        popHead(head);
+      else if (pil == getCount(head))
+        popTail(head);
+      else if ((pil < 1) || pil > getCount(head)) {
+        printf("Invalid Input");
+        getch();
+      } else
+        head = popSomewhere(head, pil);
+      return;
+    }
+    getch();
+    system("cls");
+  }
+}
 void viewData(struct Node* head) {
   struct Node* ptr;
   ptr = head;
@@ -232,7 +299,7 @@ void viewData(struct Node* head) {
         "\n");
     while (ptr != NULL) {
       i++;
-      printf("%.2d. | %.5s | %-30s | %-3.d       | Rp. %d,-\n", i, ptr->code,
+      printf("%.2d. | %.5s | %-30s | %-9.d | Rp. %d,-\n", i, ptr->code,
              ptr->doll_name, ptr->quantity, ptr->price);
       ptr = ptr->next;
     }
@@ -262,29 +329,7 @@ void menu() {
         break;
 
       case 3:
-        if (head == NULL) {
-          printf("No Data to Delete!");
-          getch();
-        } else {
-          int choice;
-          system("cls");
-          printf("Input Choice\n");
-          printf("1.Pop Data at Head\n");
-          printf("2.Pop Data at Tail\n");
-          printf("3.pop somewhere\n");
-          printf("Choice:");
-          scanf("%d", &choice);
-          if (choice == 1) {
-            head = popHeaad(head);
-            break;
-          } else if (choice == 2) {
-            head = popTail(head);
-          } else {
-            break;
-          }
-          getch();
-          system("cls");
-        }
+        removestock();
         break;
 
       case 4:
@@ -305,7 +350,6 @@ void menu() {
     }
   } while (pilih != 4);
 }
-
 int main() {
   head = NULL;
   printf("Welcome to our program\n\n");
