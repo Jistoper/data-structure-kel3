@@ -81,10 +81,10 @@ struct Node* pushSomewhere(struct Node* head, struct Node data, int pil) {
   strcpy(newNode->doll_name, data.doll_name);
   newNode->quantity = data.quantity;
   newNode->price = data.price;
-  for (int i = 0; i < pil - 1; i++) ptr = ptr->next;
-  temp = ptr;
+  for (int i = 0; i < pil - 2; i++) ptr = ptr->next;
+  temp = ptr->next;
   ptr->next = newNode;
-  newNode->next = temp->next;
+  newNode->next = temp;
   return head;
 }
 
@@ -140,9 +140,10 @@ struct Node* popSomewhere(struct Node* head, int x) {
 }
 
 void addstock() {
-  struct Node data;
-  int choice;
   system("cls");
+  struct Node data;
+  int choice, pil = 0;
+  viewData();
   printf("Input Choice\n");
   printf("1.Push Data at Head\n");
   printf("2.Push Data at Tail\n");
@@ -150,6 +151,16 @@ void addstock() {
   printf("Choice: ");
   scanf("%d", &choice);
   system("cls");
+  viewData();
+  if (choice == 3) {
+    printf("Input Index to be Inserted:");
+    scanf("%d", &pil);
+    if ((pil < 1) || pil > getCount(head)) {
+      printf("invalid input");
+      getch();
+      return;
+    }
+  }
   printf("Input Doll Code [5 chars]: ");
   scanf("%s", data.code);
   getchar();
@@ -162,26 +173,20 @@ void addstock() {
   printf("Input Doll Price: ");
   scanf("%d", &data.price);
   getchar();
+  printf("Data Input Successfull");
   if (head == NULL)
     head = initNode(head, data);
   else {
-    if (choice == 1) {
+    if (choice == 1 || pil == 1) {
       head = pushHead(head, data);
-    } else if (choice == 2) {
+    } else if (choice == 2 || pil == getCount(head)) {
       head = pushTail(head, data);
     } else if (choice == 3) {
-      viewData();
-      int pil;
-      scanf("%d", &pil);
-      if ((pil < 2) || pil >= getCount(head)) {
-        printf("invalid input");
-        getch();
-        return;
-      } else
-        head = pushSomewhere(head, data, pil);
+      head = pushSomewhere(head, data, pil);
     }
   }
   system("cls");
+  return;
 }
 void sell() {
   struct Node* ptr;
@@ -340,7 +345,7 @@ void menu() {
         printf("Press Enter to continue");
         getch();
         return;
-        break;
+
       default:
         system("cls");
         printf("Menu not available\n");
@@ -378,6 +383,12 @@ jofwegre
 2
 DL005
 fewuifhwe
+10
+100000
+2
+3
+DL006
+failedmaybe
 10
 100000
 */
