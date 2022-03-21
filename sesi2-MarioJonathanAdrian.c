@@ -140,54 +140,120 @@ struct Node* popSomewhere(struct Node* head, int x) {
 }
 
 void addstock() {
-  system("cls");
+  clear();
   struct Node data;
-  int choice, pil = 0;
-  viewData();
-  printf("Input Choice\n");
-  printf("1.Push Data at Head\n");
-  printf("2.Push Data at Tail\n");
-  printf("3.Push somewhere\n");
+  int choice = 0;
+  viewData(head);
+  printf("\nMenu\n");
+  printf("1. Add Stock\n");
+  printf("2. Add New Doll\n");
   printf("Choice: ");
   scanf("%d", &choice);
-  system("cls");
-  viewData();
-  if (choice == 3) {
-    printf("Input Index to be Inserted:");
-    scanf("%d", &pil);
-    if ((pil < 1) || pil > getCount(head)) {
-      printf("invalid input");
+  if (choice == 1) {
+    clear();
+    if (head == NULL) {
+      printf("No Data to Delete!");
       getch();
       return;
     }
-  }
-  printf("Input Doll Code [5 chars]: ");
-  scanf("%s", data.code);
-  getchar();
-  printf("Input Doll Name: ");
-  scanf("%[^\n]", data.doll_name);
-  getchar();
-  printf("Input Doll Quantity: ");
-  scanf("%d", &data.quantity);
-  getchar();
-  printf("Input Doll Price: ");
-  scanf("%d", &data.price);
-  getchar();
-  printf("Data Input Successfull");
-  if (head == NULL)
-    head = initNode(head, data);
-  else {
-    if (choice == 1 || pil == 1) {
-      head = pushHead(head, data);
-    } else if (choice == 2 || pil == getCount(head)) {
-      head = pushTail(head, data);
-    } else if (choice == 3) {
-      head = pushSomewhere(head, data, pil);
+    struct Node* ptr;
+    char doll_code[5];
+    int check = 0, quantity = 0;
+
+    while (check != 1) {
+      ptr = head;
+      viewData(head);
+      printf("\nInput Doll Code [5 chars]: ");
+      scanf("%s", doll_code);
+      while (ptr != NULL) {
+        if (strcmp(doll_code, ptr->code) == 0) {
+          check = 1;
+          break;
+        }
+        ptr = ptr->next;
+      }
+      if (check == 0) {
+        printf("\n--Doll code doesn't exist--");
+        delay(2);
+        clear();
+      }
     }
+
+    clear();
+    while (check != 2) {
+      printf(
+          " Code  |            Doll Name           | Available | Price      "
+          "  "
+          "\n");
+      printf(" %.5s | %-30s | %-3.d       | Rp. %d,-\n", ptr->code,
+             ptr->doll_name, ptr->quantity, ptr->price);
+      printf("Input quantity [1...100]: ");
+      scanf("%d", &quantity);
+      if (quantity < 1 || quantity > 100) {
+        printf("\n--Quantity must be more than 0 and no more than 100--");
+        delay(2);
+        clear();
+      } else {
+        check = 2;
+      }
+    }
+    ptr->quantity = ptr->quantity + quantity;
+  } else if (choice == 2) {
+    clear();
+    viewData(head);
+    printf("\nInput Choice\n");
+    printf("1.Push Data at Head\n");
+    printf("2.Push Data at Tail\n");
+    printf("3.Push somewhere\n");
+    printf("Choice: ");
+    scanf("%d", &choice);
+    system("cls");
+    viewData(head);
+    int pil = 0;
+    if (choice == 3) {
+      printf("Input Index to be Inserted:");
+      scanf("%d", &pil);
+      if ((pil < 1) || pil > getCount(head)) {
+        printf("invalid input");
+        getch();
+        return;
+      }
+    }
+    printf("\nInput Doll Code [5 chars]: ");
+    scanf("%s", data.code);
+    getchar();
+    printf("Input Doll Name: ");
+    scanf("%[^\n]", data.doll_name);
+    getchar();
+    printf("Input Doll Quantity: ");
+    scanf("%d", &data.quantity);
+    getchar();
+    printf("Input Doll Price: ");
+    scanf("%d", &data.price);
+    getchar();
+    printf("Data Input Successfull");
+    if (head == NULL)
+      head = initNode(head, data);
+    else {
+      if (choice == 1 || pil == 1) {
+        head = pushHead(head, data);
+      } else if (choice == 2 || pil == getCount(head)) {
+        head = pushTail(head, data);
+      } else if (choice == 3) {
+        head = pushSomewhere(head, data, pil);
+      }
+    }
+    system("cls");
+    return;
   }
-  system("cls");
-  return;
+
+  clear();
+  printf("\nAdding Success!");
+  delay(2);
+
+  menu();
 }
+
 void sell() {
   struct Node* ptr;
   int check = 0, quantity = 0, total = 0;
@@ -252,7 +318,7 @@ void sell() {
 }
 void removestock() {
   if (head == NULL) {
-    printf("No Data to Delete!");
+    printf("No Data to add!");
     getch();
   } else {
     int choice;
@@ -279,7 +345,7 @@ void removestock() {
       else if (pil == getCount(head))
         popTail(head);
       else if ((pil < 1) || pil > getCount(head)) {
-        printf("Invalid Input");
+        printf("\nInvalid Input");
         getch();
       } else
         head = popSomewhere(head, pil);
@@ -294,12 +360,13 @@ void viewData(struct Node* head) {
   ptr = head;
 
   if (head == NULL)
-    printf("Data not available");
+    printf("Data not available!\n");
   else {
     int i = 0;
     printf("%d data available\n", getCount(head));
     printf(
-        "No. | Code  |            Doll Name           | Available | Price      "
+        "No. | Code  |            Doll Name           | Available | Price    "
+        "  "
         "  "
         "\n");
     while (ptr != NULL) {
@@ -318,7 +385,7 @@ void menu() {
   do {
     system("cls");
     viewData(head);
-    printf("\n\nMenu\n");
+    printf("\nMenu\n");
     printf("1. Sell\n");
     printf("2. Add Stock\n");
     printf("3. Remove Stock\n");
@@ -361,12 +428,13 @@ int main() {
   printf("Loading data");
   for (int i = 0; i < 3; i++) {
     printf(".");
-    delay(1);
+    // delay(1);
   }
   menu();
 }
 
 /*
+2
 2
 1
 DL003
@@ -375,10 +443,12 @@ jofwe
 100000
 2
 2
+2
 DL004
 jofwegre
 10
 100000
+2
 2
 2
 DL005
@@ -386,9 +456,14 @@ fewuifhwe
 10
 100000
 2
+2
 3
 DL006
 failedmaybe
 10
 100000
+*/
+/*
+2 2
+
 */
