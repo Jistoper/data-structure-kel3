@@ -155,7 +155,7 @@ void addstock() {
   if (choice == 1) {
     clear();
     if (head == NULL) {
-      printf("No Data to Delete!");
+      printf("No Stock to add!");
       getch();
       return;
     }
@@ -201,6 +201,7 @@ void addstock() {
       }
     }
     ptr->quantity = ptr->quantity + quantity;
+    printf("\nAdding Success!");
   } else if (choice == 2) {
     clear();
     viewData(head);
@@ -245,16 +246,17 @@ void addstock() {
       } else if (choice == 3) {
         head = pushSomewhere(head, data, pil);
       }
+      printf("\nAdding Success!");
     }
     system("cls");
     return;
+  } else if (choice < 1 || choice > 3) {
+    printf("Invalid Input!\n");
   }
 
-  clear();
-  printf("\nAdding Success!");
   delay(2);
-
-  menu();
+  clear();
+  return;
 }
 void sell() {
   struct Node* ptr;
@@ -372,7 +374,7 @@ void viewData(struct Node* head) {
         "\n");
     while (ptr != NULL) {
       i++;
-      printf("%.2d. | %.5s | %-30s | %-9.d | Rp. %d,-\n", i, ptr->code,
+      printf("%.2d. | %-5s | %-30s | %-9.d | Rp. %d,-\n", i, ptr->code,
              ptr->doll_name, ptr->quantity, ptr->price);
       ptr = ptr->next;
     }
@@ -431,5 +433,24 @@ int main() {
     printf(".");
     delay(1);
   }
+  system("cls");
   menu();
 }
+
+/*
+2 2 2
+DL003
+wefwefwef
+120
+10000
+2 2 2
+DL004
+wefwefwef
+120
+10000
+2 2 2
+DL005
+wefwefwef
+120
+10000
+*/
