@@ -325,7 +325,7 @@ void sell() {
 }
 void removestock() {
   if (head == NULL) {
-    printf("No Data to add!");
+    printf("No Data to Remove!");
     getch();
   } else {
     int choice;
