@@ -114,9 +114,12 @@ struct Node* popHead(struct Node* head) {
     printf("data %s telah dihapus", head->code);
     free(head);
     head = NULL;
+    getch();
   } else {
     head = head->next;
+    printf("data %s telah dihapus", head->next->code);
     free(ptr);
+    getch();
   }
   return head;
 }
@@ -253,7 +256,6 @@ void addstock() {
 
   menu();
 }
-
 void sell() {
   struct Node* ptr;
   int check = 0, quantity = 0, total = 0;
@@ -329,22 +331,21 @@ void removestock() {
     printf("3.Pop Somewhere\n");
     printf("Choice:");
     scanf("%d", &choice);
-    if (choice == 1) {
-      head = popHead(head);
-      return;
-    } else if (choice == 2) {
-      head = popTail(head);
-    } else if (choice == 3) {
+    int pil;
+    if (choice == 3) {
       clear();
       viewData(head);
-      int pil;
       printf("\nInput Index to be deleted: ");
       scanf("%d", &pil);
-      if (pil == 1)
-        popHead(head);
-      else if (pil == getCount(head))
-        popTail(head);
-      else if ((pil < 1) || pil > getCount(head)) {
+    }
+
+    if (choice == 1 || pil == 1) {
+      head = popHead(head);
+      return;
+    } else if (choice == 2 || pil == getCount(head) == 1) {
+      head = popTail(head);
+    } else if (choice == 3) {
+      if ((pil < 1) || pil > getCount(head)) {
         printf("\nInvalid Input");
         getch();
       } else
@@ -428,42 +429,7 @@ int main() {
   printf("Loading data");
   for (int i = 0; i < 3; i++) {
     printf(".");
-    // delay(1);
+    delay(1);
   }
   menu();
 }
-
-/*
-2
-2
-1
-DL003
-jofwe
-10
-100000
-2
-2
-2
-DL004
-jofwegre
-10
-100000
-2
-2
-2
-DL005
-fewuifhwe
-10
-100000
-2
-2
-3
-DL006
-failedmaybe
-10
-100000
-*/
-/*
-2 2
-
-*/
