@@ -71,15 +71,25 @@ struct Node* pushTail(struct Node* head, struct Node data) {
   newNode->next = NULL;
   return head;
 }
+struct NOde* pushSomewhere(struct Node* head, struct Node data, int pil) {
+  struct Node *ptr, *temp;
+  ptr = head;
+  struct Node* newNode;
+  newNode = (struct Node*)malloc(sizeof(struct Node));
+  strcpy(newNode->code, data.code);
+  strcpy(newNode->doll_name, data.doll_name);
+  newNode->quantity = data.quantity;
+  newNode->price = data.price;
+  for (int i = 0; i < pil - 1; i++) ptr = ptr->next;
+  temp = ptr;
+  ptr->next = newNode;
+  newNode->next = temp->next;
+  return head;
+}
 
 struct Node* popTail(struct Node* head) {
   struct Node* ptr;
   ptr = head;
-  if (head == NULL) {
-    printf("No Data to Delete!");
-    getch();
-    return head;
-  }
   if (head->next == NULL) {
     printf("data %s telah dihapus", head->code);
     free(head);
@@ -97,11 +107,6 @@ struct Node* popTail(struct Node* head) {
 struct Node* popHeaad(struct Node* head) {
   struct Node* ptr;
   ptr = head;
-  if (head == NULL) {
-    printf("No Data to Delete!");
-    getch();
-    return head;
-  }
   if (head->next == NULL) {
     printf("data %s telah dihapus", head->code);
     free(head);
@@ -112,7 +117,7 @@ struct Node* popHeaad(struct Node* head) {
   }
   return head;
 }
-struct Node* popsomething(struct Node* head, int x) {}
+struct Node* popSomewhere(struct Node* head, int x) {}
 
 void addstock() {
   struct Node data;
@@ -121,6 +126,7 @@ void addstock() {
   printf("Input Choice\n");
   printf("1.Push Data at Head\n");
   printf("2.Push Data at Tail\n");
+  printf("3.Push somewhere\n");
   printf("Choice: ");
   scanf("%d", &choice);
   system("cls");
@@ -143,7 +149,16 @@ void addstock() {
       head = pushHead(head, data);
     } else if (choice == 2) {
       head = pushTail(head, data);
-    } else {
+    } else if (choice == 3) {
+      viewData();
+      int pil;
+      scanf("%d", &pil);
+      if ((pil < 2) || pil >= getCount(head)) {
+        printf("invalid input");
+        getch();
+        return;
+      } else
+        head = pushSomewhere(head, data, pil);
     }
   }
   system("cls");
@@ -246,26 +261,32 @@ void menu() {
         addstock();
         break;
 
-      case 3: {
-        int choice;
-        system("cls");
-        printf("Input Choice\n");
-        printf("1.Pop Data at Head\n");
-        printf("2.Pop Data at Tail\n");
-        printf("Choice:");
-        scanf("%d", &choice);
-        if (choice == 1) {
-          head = popHeaad(head);
-          break;
-        } else if (choice == 2) {
-          head = popTail(head);
+      case 3:
+        if (head == NULL) {
+          printf("No Data to Delete!");
+          getch();
         } else {
-          break;
+          int choice;
+          system("cls");
+          printf("Input Choice\n");
+          printf("1.Pop Data at Head\n");
+          printf("2.Pop Data at Tail\n");
+          printf("3.pop somewhere\n");
+          printf("Choice:");
+          scanf("%d", &choice);
+          if (choice == 1) {
+            head = popHeaad(head);
+            break;
+          } else if (choice == 2) {
+            head = popTail(head);
+          } else {
+            break;
+          }
+          getch();
+          system("cls");
         }
-        getch();
-        system("cls");
         break;
-      }
+
       case 4:
         printf("Exiting program...");
         sleep(3);
@@ -295,3 +316,24 @@ int main() {
   }
   menu();
 }
+
+/*
+2
+1
+DL003
+jofwe
+10
+100000
+2
+2
+DL004
+jofwegre
+10
+100000
+2
+2
+DL005
+fewuifhwe
+10
+100000
+*/
