@@ -126,22 +126,20 @@ struct Node* popHead(struct Node* head) {  // Mario G
   }
   return head;
 }
-struct Node* popSomewhere(struct Node* head, int x) {
-  struct Node *ptr, *tmp;
-  ptr = head;
+struct Node* popSomewhere(struct Node* head, int x) {  // Adrian
   if (head->next == NULL) {
     printf("data %s telah dihapus", head->code);
     free(head);
     head = NULL;
   } else {
+    struct Node *ptr, *tmp;
+    ptr = head;
     for (int i = 0; i < x - 2; i++) ptr = ptr->next;
-
     printf("data %s telah dihapus", ptr->next->code);
     tmp = ptr->next->next;
     free(ptr->next);
     ptr->next = tmp;
   }
-  getch();
   return head;
 }
 
@@ -171,13 +169,13 @@ void addstock() {
       viewData(head);
       printf("\nInput Item Code [5 chars]: ");
       scanf("%s", item_code);
-      while (ptr != NULL) {
+      do {
         if (strcmp(item_code, ptr->code) == 0) {
           check = 1;
           break;
         }
         ptr = ptr->next;
-      }
+      } while (ptr != head);
       if (check == 0) {
         printf("\n--Doll code doesn't exist--");
         delay(2);
@@ -269,13 +267,13 @@ void sell() {
     if (ptr != NULL) {
       printf("\nInput Doll Code [5 chars]: ");
       scanf("%s", item_code);
-      while (ptr != NULL) {
+      do {
         if (strcmp(item_code, ptr->code) == 0) {
           check = 1;
           break;
         }
         ptr = ptr->next;
-      }
+      } while (ptr != head);
       if (check == 0) {
         printf("\n--Doll code doesn't exist--");
         delay(2);
