@@ -149,7 +149,7 @@ void addstock() {
   viewData(head);
   printf("\nMenu\n");
   printf("1. Add Stock\n");
-  printf("2. Add New Doll\n");
+  printf("2. Add New Item\n");
   printf("Choice: ");
   scanf("%d", &choice);
   if (choice == 1) {
@@ -160,16 +160,16 @@ void addstock() {
       return;
     }
     struct Node* ptr;
-    char doll_code[5];
+    char item_code[5];
     int check = 0, quantity = 0;
 
     while (check != 1) {
       ptr = head;
       viewData(head);
-      printf("\nInput Doll Code [5 chars]: ");
-      scanf("%s", doll_code);
+      printf("\nInput Item Code [5 chars]: ");
+      scanf("%s", item_code);
       while (ptr != NULL) {
-        if (strcmp(doll_code, ptr->code) == 0) {
+        if (strcmp(item_code, ptr->code) == 0) {
           check = 1;
           break;
         }
@@ -264,7 +264,7 @@ void addstock() {
 void sell() {
   struct Node* ptr;
   int check = 0, quantity = 0, total = 0;
-  char doll_code[5];
+  char item_code[5];
 
   while (check != 1) {
     clear();
@@ -272,9 +272,9 @@ void sell() {
     viewData(head);
     if (ptr != NULL) {
       printf("\nInput Doll Code [5 chars]: ");
-      scanf("%s", doll_code);
+      scanf("%s", item_code);
       while (ptr != NULL) {
-        if (strcmp(doll_code, ptr->code) == 0) {
+        if (strcmp(item_code, ptr->code) == 0) {
           check = 1;
           break;
         }
