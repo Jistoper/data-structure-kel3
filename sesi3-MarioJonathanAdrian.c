@@ -31,50 +31,53 @@ struct Node* head;
 int getCount(struct Node* head) {
   int count = 0;
   struct Node* current = head;
-  while (current != NULL) {
+  do {
     count++;
     current = current->next;
-  }
+  } while (current != head);
   return count;
 }
 
-struct Node* initNode(struct Node* head, struct Node data) {
+struct Node* initNode(struct Node* head, struct Node data) {  // Adrian
   head = (struct Node*)malloc(sizeof(struct Node));
   strcpy(head->code, data.code);
   strcpy(head->item_name, data.item_name);
   head->quantity = data.quantity;
   head->price = data.price;
-  head->next = NULL;
+  head->next = head;
+  printf("Data has been added successfully!");
   return head;
 }
-struct Node* pushHead(struct Node* head, struct Node data) {
-  struct Node* newNode;
-  newNode = (struct Node*)malloc(sizeof(struct Node));
+struct Node* pushHead(struct Node* head, struct Node data) {  // Adrian
+  if (head == NULL) return initNode(head, data);
+  struct Node *ptr = head, *newNode = (struct Node*)malloc(sizeof(struct Node));
+  while (ptr->next != head) ptr = ptr->next;
   strcpy(newNode->code, data.code);
   strcpy(newNode->item_name, data.item_name);
   newNode->quantity = data.quantity;
   newNode->price = data.price;
   newNode->next = head;
   head = newNode;
+  ptr->next = head;
   return head;
 }
-struct Node* pushTail(struct Node* head, struct Node data) {
-  struct Node* ptr;
+struct Node* pushTail(struct Node* head, struct Node data) {  // Mario G
+  if (head == NULL) return initNode(head, data);
+  struct Node *newNode, *ptr;
   ptr = head;
-  struct Node* newNode;
   newNode = (struct Node*)malloc(sizeof(struct Node));
   strcpy(newNode->code, data.code);
   strcpy(newNode->item_name, data.item_name);
   newNode->quantity = data.quantity;
   newNode->price = data.price;
-  while (ptr->next != NULL) ptr = ptr->next;
+  newNode->next = head;
+  while (ptr->next != head) ptr = ptr->next;
   ptr->next = newNode;
-  newNode->next = NULL;
   return head;
 }
-struct Node* pushSomewhere(struct Node* head, struct Node data, int pil) {
-  struct Node *ptr, *praptr;
-  ptr = head;
+struct Node* pushSomewhere(struct Node* head, struct Node data, int pil) {  // A
+  if (head == NULL) return initNode(head, data);
+  struct Node *ptr = head, *praptr;
   struct Node* newNode;
   newNode = (struct Node*)malloc(sizeof(struct Node));
   strcpy(newNode->code, data.code);
@@ -88,38 +91,38 @@ struct Node* pushSomewhere(struct Node* head, struct Node data, int pil) {
   return head;
 }
 
-struct Node* popTail(struct Node* head) {
-  struct Node* ptr;
-  ptr = head;
-  if (head->next == NULL) {
+struct Node* popTail(struct Node* head) {  // DAH
+  struct Node* ptr = head;
+  if (head->next == head) {
     printf("data %s telah dihapus", head->code);
     free(head);
     head = NULL;
-    getch();
   } else {
-    while (ptr->next->next != NULL) ptr = ptr->next;
+    while (ptr->next->next != head) ptr = ptr->next;
 
     printf("data %s telah dihapus", ptr->next->code);
     free(ptr->next);
-    ptr->next = NULL;
-    getch();
+    ptr->next = head;
   }
-  getch();
   return head;
 }
-struct Node* popHead(struct Node* head) {
-  struct Node* ptr;
-  ptr = head;
-  if (head->next == NULL) {
-    printf("data %s telah dihapus", head->code);
+struct Node* popHead(struct Node* head) {  // Mario G
+  if (head == NULL) {
+    printf("No Data to Delete!");
+  } else if (head->next == head) {
+    printf("Data %s berhasil dihapus", head->code);
     free(head);
     head = NULL;
-    getch();
   } else {
+    struct Node* ptr;
+    ptr = head;
+
+    while (ptr->next != head) ptr = ptr->next;
+
     head = head->next;
-    printf("data %s telah dihapus", head->next->code);
-    free(ptr);
-    getch();
+    printf("Data %s berhasil dihapus", ptr->next->code);
+    free(ptr->next);
+    ptr->next = head;
   }
   return head;
 }
@@ -235,22 +238,15 @@ void addstock() {
     printf("Input Doll Price: ");
     scanf("%d", &data.price);
     getchar();
-    printf("Data Input Successfull");
-    if (head == NULL)
-      head = initNode(head, data);
-    else {
-      if (choice == 1 || pil == 1) {
-        head = pushHead(head, data);
-      } else if (choice == 2 || pil == (getCount(head) + 1)) {
-        head = pushTail(head, data);
-      } else if (choice == 3) {
-        if ((choice < 1) || choice > (getCount(head) + 1)) {
-          printf("Invalid Input!\n");
-        } else
-          head = pushSomewhere(head, data, pil);
-      }
-      printf("\nAdding Success!");
-    }
+    if (choice == 1 || pil == 1)
+      head = pushHead(head, data);
+    else if (choice == 2 || pil == (getCount(head) + 1))
+      head = pushTail(head, data);
+    else if (choice == 3)
+      head = pushSomewhere(head, data, pil);
+
+    printf("\nAdding Success!");
+
     system("cls");
     return;
   } else if (choice < 1 || choice > 3) {
@@ -344,18 +340,16 @@ void removestock() {
       scanf("%d", &pil);
     }
 
-    if (choice == 1 || pil == 1) {
+    if (choice == 1 || pil == 1)
       head = popHead(head);
-      return;
-    } else if (choice == 2 || pil == getCount(head) == 1) {
+    else if (choice == 2 || pil == getCount(head) == 1)
       head = popTail(head);
-    } else if (choice == 3) {
+    else if (choice == 3) {
       if ((pil < 1) || pil > getCount(head)) {
         printf("\nInvalid Input");
         getch();
       } else
         head = popSomewhere(head, pil);
-      return;
     }
     getch();
     system("cls");
@@ -375,12 +369,12 @@ void viewData(struct Node* head) {
         "  "
         "  "
         "\n");
-    while (ptr != NULL) {
+    do {
       i++;
       printf("%.2d. | %-5s | %-30s | %-9.d | Rp. %d,-\n", i, ptr->code,
              ptr->item_name, ptr->quantity, ptr->price);
       ptr = ptr->next;
-    }
+    } while (ptr != head);
     for (int i = 0; i < 75; i++) printf("-");
   }
 }
