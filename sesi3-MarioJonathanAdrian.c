@@ -37,6 +37,39 @@ int getCount(struct Node* head) {
   } while (current != head);
   return count;
 }
+struct Node* sortList(struct Node* head) {  // Adrian
+  struct Node *current = head, *index = NULL;
+  int temp;
+  if (head == NULL) {
+    printf("List is empty");
+  } else {
+    do {
+      index = current->next;
+      while (index != head) {
+        if (strcmp(current->code, index->code) > 0) {
+          struct Node temp;
+          strcpy(temp.code, current->code);
+          strcpy(temp.item_name, current->item_name);
+          temp.quantity = current->quantity;
+          temp.price = current->price;
+
+          strcpy(current->code, index->code);
+          strcpy(current->item_name, index->item_name);
+          current->quantity = index->quantity;
+          current->price = index->price;
+
+          strcpy(index->code, temp.code);
+          strcpy(index->item_name, temp.item_name);
+          index->quantity = temp.quantity;
+          index->price = temp.price;
+        }
+        index = index->next;
+      }
+      current = current->next;
+    } while (current->next != head);
+  }
+  return head;
+}
 
 struct Node* initNode(struct Node* head, struct Node data) {  // Adrian
   head = (struct Node*)malloc(sizeof(struct Node));
@@ -168,7 +201,7 @@ void addstock() {
       ptr = head;
       viewData(head);
       printf("\nInput Item Code [5 chars]: ");
-      scanf("%s", item_code);
+      scanf("%5s", item_code);
       do {
         if (strcmp(item_code, ptr->code) == 0) {
           check = 1;
@@ -225,7 +258,7 @@ void addstock() {
       }
     }
     printf("\nInput Doll Code [5 chars]: ");
-    scanf("%s", data.code);
+    scanf("%5s", data.code);
     getchar();
     printf("Input Doll Name: ");
     scanf("%[^\n]", data.item_name);
@@ -255,6 +288,7 @@ void addstock() {
   clear();
   return;
 }
+
 void sell() {
   struct Node* ptr;
   int check = 0, quantity = 0, total = 0;
@@ -266,7 +300,7 @@ void sell() {
     viewData(head);
     if (ptr != NULL) {
       printf("\nInput Doll Code [5 chars]: ");
-      scanf("%s", item_code);
+      scanf("%5s", item_code);
       do {
         if (strcmp(item_code, ptr->code) == 0) {
           check = 1;
@@ -317,6 +351,7 @@ void sell() {
   clear();
   menu();
 }
+
 void removestock() {
   if (head == NULL) {
     printf("No Data to Remove!");
@@ -353,7 +388,7 @@ void removestock() {
     system("cls");
   }
 }
-void viewData(struct Node* head) {
+void viewData(struct Node* head) {  // Mario G
   struct Node* ptr;
   ptr = head;
 
@@ -369,8 +404,15 @@ void viewData(struct Node* head) {
         "\n");
     do {
       i++;
-      printf("%.2d. | %-5s | %-30s | %-9.d | Rp. %d,-\n", i, ptr->code,
+      printf("%.2d. | %-5s | %-30s | %-9.d | Rp. %-10.d,-", i, ptr->code,
              ptr->item_name, ptr->quantity, ptr->price);
+      if (ptr->next == head)
+        printf(" |--->Tail\n");
+      else if (ptr == head)
+        printf(" |--->Head\n");
+      else
+        printf("\n");
+
       ptr = ptr->next;
     } while (ptr != head);
     for (int i = 0; i < 75; i++) printf("-");
@@ -387,7 +429,8 @@ void menu() {
     printf("1. Sell\n");
     printf("2. Add Stock\n");
     printf("3. Remove Stock\n");
-    printf("4. Exit\n");
+    printf("4. Sort Data\n");
+    printf("5. Exit\n");
     printf("Pilihan : ");
     scanf("%d", &pilih);
     switch (pilih) {
@@ -403,6 +446,10 @@ void menu() {
         break;
 
       case 4:
+        head = sortList(head);
+        break;
+
+      case 5:
         printf("Exiting program\n");
         for (int i = 0; i < 4; i++) {
           printf(".");
@@ -421,7 +468,7 @@ void menu() {
         system("cls");
         break;
     }
-  } while (pilih != 4);
+  } while (pilih != 5);
 }
 int main() {
   clear();
@@ -443,13 +490,37 @@ kangaroo Teddy Bear
 25
 60000
 2 2 2
-DL005
+DL002
 Lil Benny Phant
 40
 110000
 2 2 2
-DL006
+DL001
 Cute Baby Shark
+29
+2 2 2
+AAAAA
+Index 1
+29
+111111111
+2 2 2
+DL001
+Cute Baby Shark
+29
+130000
+2 2 2
+ZZZZZ
+Index Terakhir
+25
+999999999
+2 2 2
+DL008
+Octo
+40
+110000
+2 2 2
+DL010
+Baby Shark
 29
 130000
 */
