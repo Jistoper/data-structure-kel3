@@ -28,7 +28,7 @@ struct Node {
 };
 struct Node* head;
 
-int getCount(struct Node* head) {
+int getCount(struct Node* head) {  // Jonathan
   int count = 0;
   struct Node* current = head;
   do {
@@ -42,6 +42,7 @@ struct Node* sortList(struct Node* head) {  // Adrian
   int temp;
   if (head == NULL) {
     printf("List is empty");
+    getch();
   } else {
     do {
       index = current->next;
@@ -71,7 +72,7 @@ struct Node* sortList(struct Node* head) {  // Adrian
   return head;
 }
 
-struct Node* initNode(struct Node* head, struct Node data) {  // Adrian
+struct Node* initNode(struct Node* head, struct Node data) {  // Jonathan
   head = (struct Node*)malloc(sizeof(struct Node));
   strcpy(head->code, data.code);
   strcpy(head->item_name, data.item_name);
@@ -81,7 +82,7 @@ struct Node* initNode(struct Node* head, struct Node data) {  // Adrian
   printf("Data has been added successfully!");
   return head;
 }
-struct Node* pushHead(struct Node* head, struct Node data) {  // Adrian
+struct Node* pushHead(struct Node* head, struct Node data) {  // Jonathan
   if (head == NULL) return initNode(head, data);
   struct Node *ptr = head, *newNode = (struct Node*)malloc(sizeof(struct Node));
   while (ptr->next != head) ptr = ptr->next;
@@ -124,7 +125,7 @@ struct Node* pushSomewhere(struct Node* head, struct Node data, int pil) {  // A
   return head;
 }
 
-struct Node* popTail(struct Node* head) {  // DAH
+struct Node* popTail(struct Node* head) {  // Jonathan
   struct Node* ptr = head;
   if (head->next == head) {
     printf("data %s telah dihapus", head->code);
@@ -176,6 +177,68 @@ struct Node* popSomewhere(struct Node* head, int x) {  // Adrian
   return head;
 }
 
+void sell() {
+  struct Node* ptr;
+  int check = 0, quantity = 0, total = 0;
+  char item_code[5];
+
+  while (check != 1) {
+    clear();
+    ptr = head;
+    viewData(head);
+    if (ptr != NULL) {
+      printf("\nInput Doll Code [5 chars]: ");
+      scanf("%5s", item_code);
+      do {
+        if (strcmp(item_code, ptr->code) == 0) {
+          check = 1;
+          break;
+        }
+        ptr = ptr->next;
+      } while (ptr != head);
+      if (check == 0) {
+        printf("\n--Doll code doesn't exist--");
+        delay(2);
+        clear();
+      }
+    } else {
+      system("cls");
+      printf("\n\nData doesn't exist\n\n");
+      printf("Press Enter to Continue");
+      getch();
+      system("cls");
+      menu();
+    }
+  }
+
+  clear();
+  while (check != 2) {
+    printf(
+        " Code  |            Doll Name           | Available | Price      "
+        "  "
+        "\n");
+    printf(" %.5s | %-30s | %-9.d | Rp. %d,-\n", ptr->code, ptr->item_name,
+           ptr->quantity, ptr->price);
+    printf("Input quantity: ");
+    scanf("%d", &quantity);
+    if (quantity < 1 || quantity > ptr->quantity) {
+      printf("\n--Quantity must be more than 0 and not more than stock--");
+      delay(2);
+      clear();
+    } else {
+      check = 2;
+    }
+  }
+
+  clear();
+  total = ptr->price * quantity;
+  printf("\nYour total spending is Rp. %d,-\n", total);
+  printf("\n--Press Enter to Continue--");
+  ptr->quantity -= quantity;
+  getch();
+  clear();
+  menu();
+}
 void addstock() {
   clear();
   struct Node data;
@@ -288,70 +351,6 @@ void addstock() {
   clear();
   return;
 }
-
-void sell() {
-  struct Node* ptr;
-  int check = 0, quantity = 0, total = 0;
-  char item_code[5];
-
-  while (check != 1) {
-    clear();
-    ptr = head;
-    viewData(head);
-    if (ptr != NULL) {
-      printf("\nInput Doll Code [5 chars]: ");
-      scanf("%5s", item_code);
-      do {
-        if (strcmp(item_code, ptr->code) == 0) {
-          check = 1;
-          break;
-        }
-        ptr = ptr->next;
-      } while (ptr != head);
-      if (check == 0) {
-        printf("\n--Doll code doesn't exist--");
-        delay(2);
-        clear();
-      }
-    } else {
-      system("cls");
-      printf("\n\nData doesn't exist\n\n");
-      printf("Press Enter to Continue");
-      getch();
-      system("cls");
-      menu();
-    }
-  }
-
-  clear();
-  while (check != 2) {
-    printf(
-        " Code  |            Doll Name           | Available | Price      "
-        "  "
-        "\n");
-    printf(" %.5s | %-30s | %-9.d | Rp. %d,-\n", ptr->code, ptr->item_name,
-           ptr->quantity, ptr->price);
-    printf("Input quantity: ");
-    scanf("%d", &quantity);
-    if (quantity < 1 || quantity > ptr->quantity) {
-      printf("\n--Quantity must be more than 0 and not more than stock--");
-      delay(2);
-      clear();
-    } else {
-      check = 2;
-    }
-  }
-
-  clear();
-  total = ptr->price * quantity;
-  printf("\nYour total spending is Rp. %d,-\n", total);
-  printf("\n--Press Enter to Continue--");
-  ptr->quantity -= quantity;
-  getch();
-  clear();
-  menu();
-}
-
 void removestock() {
   if (head == NULL) {
     printf("No Data to Remove!");
