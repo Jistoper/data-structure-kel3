@@ -82,24 +82,37 @@ struct Node* pop(struct Node* top) {
 	return top;
 }
 struct Data peekTop(struct Node* top) { return top->data; }
-
+struct Node* destroy(struct Node* top) {
+	struct Node* current = top;
+	struct Node* next;
+	while (current != NULL) {
+		next = current->next;
+		free(current);
+		current = next;
+	}
+	top = NULL;
+	return top;
+}
 // ARRAY FUCTIONS
-int main() {
+
+void menu() {
 	struct Node* top;
 	top = NULL;
 	int max = 10;
-
-	int menu;
-	do {
+	int pilihan;
+	int mod = 2;
+	while (1) {
 		system("cls");
-		printf("1. Push data\n");
-		printf("2. Pop data\n");
-		printf("3. Peek data\n");
-		printf("4. View All data\n");
-		printf("5. Exit\n");
-		scanf("%d", &menu);
+		printf("1. Push Data\n");
+		printf("2. Pop Data\n");
+		printf("3. Peek Data\n");
+		printf("4. View All Data\n");
+		printf("5. Setting\n");
+		printf("6. Exit\n");
+		printf("\nPilihan Anda: ");
+		scanf("%d", &pilihan);
 
-		switch (menu) {
+		switch (pilihan) {
 		case 1:
 			if (isOverflow(top, max))
 				printf("Stack Overflow please pop first!");
@@ -112,12 +125,11 @@ int main() {
 				top = push(top, newData);
 				printf("data berhasil dimasukan!");
 				getch();
-				break;
 			}
+			break;
 
 		case 2:
 			top = pop(top);
-			getch();
 			break;
 
 		case 3:
@@ -135,11 +147,52 @@ int main() {
 			getch();
 			break;
 
-		default:
-			printf("EMPTY\n");
+		case 5:
+			system("cls");
+
+			int pil = 0;
+			while (pil != 3) {
+				system("cls");
+				if (mod == 1)
+					printf("1. change mode to linked list\n");
+				else
+					printf("1. change mode to array\n");
+				printf("2. delete all data\n");
+				printf("3. Kembali\n");
+				printf("Pilihan Anda: ");
+				scanf("%d", &pil);
+
+				if (pil == 1) {
+					if (mod == 1) {
+						//delete array
+					}
+					else {
+						top = destroy(top);
+					}
+					mod = (mod == 1) ? 2 : 1;
+				}
+				else if (pil == 2)
+					top = destroy(top);
+				else if (pil < 0 || pil > 3) {
+					printf("Menu Tidak Ada\n");
+					printf("--Tekan Enter untuk Melanjutkan--");
+					getch();
+				}
+			}
 			break;
+
+		case 6:
+			return;
+			break;
+
+		default:
+			printf("Menu Tidak Ditemukan\n");
 		}
-	} while (menu != 5);
+	}
+}
+
+int main() {
+	menu();
 	return 0;
 }
 
