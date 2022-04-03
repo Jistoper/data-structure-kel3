@@ -3,10 +3,14 @@
 #include <conio.h>
 #include <stdbool.h>
 
-
 struct Data {
 	char code[6];
 	char name[20];
+};
+struct Stack {
+	int top;
+	unsigned capacity;
+	struct Data* data;
 };
 struct Node {
 	struct Data data;
@@ -16,7 +20,7 @@ struct Node {
 
 // LINKED LIST FUNCTIONS
 bool isEmpty(struct Node* top) { return (top == NULL); }
-bool isOverflow(struct Node* top, int max) {
+bool isFull(struct Node* top, int max) {
 	struct Node* ptr;
 	ptr = top;
 	if (isEmpty(top))
@@ -81,7 +85,7 @@ struct Node* pop(struct Node* top) {
 	}
 	return top;
 }
-struct Data peekTop(struct Node* top) { return top->data; }
+struct Data peek(struct Node* top) { return top->data; }
 struct Node* destroy(struct Node* top) {
 	struct Node* current = top;
 	struct Node* next;
@@ -95,7 +99,6 @@ struct Node* destroy(struct Node* top) {
 }
 
 // ARRAY FUCTIONS
-// bool arr_isEmpty(struct Node* top) { return top->next == -1; }//Present?
 
 
 void menu() {
@@ -120,7 +123,7 @@ void menu() {
 				// ARRAY
 			}
 			else if (mod == 2) {
-				if (isOverflow(top, max))
+				if (isFull(top, max))
 					printf("Stack Overflow please pop first!");
 				else {
 					struct Data newData;
@@ -146,7 +149,7 @@ void menu() {
 				if (isEmpty(top))
 					printf("No Data to Peek!");
 				else {
-					struct Data dataTop = peekTop(top);
+					struct Data dataTop = peek(top);
 					printf("%s %s \n", dataTop.code, dataTop.name);
 				}
 			}
