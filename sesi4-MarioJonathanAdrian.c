@@ -93,14 +93,16 @@ struct Node* destroy(struct Node* top) {
 	top = NULL;
 	return top;
 }
+
 // ARRAY FUCTIONS
+// bool arr_isEmpty(struct Node* top) { return top->next == -1; }//Present?
+
 
 void menu() {
-	struct Node* top;
-	top = NULL;
-	int max = 10;
-	int pilihan;
-	int mod = 2;
+	struct Node* top = NULL;
+	int max, pilihan, mod = 2;
+	printf("Masukkan Max Data : ");
+	scanf("%d", &max);
 	while (1) {
 		system("cls");
 		printf("1. Push Data\n");
@@ -114,30 +116,39 @@ void menu() {
 
 		switch (pilihan) {
 		case 1:
-			if (isOverflow(top, max))
-				printf("Stack Overflow please pop first!");
-			else {
-				struct Data newData;
-				printf("masukan code: ");
-				scanf("%s", &newData.code);
-				printf("masukan nama: ");
-				scanf("%s", &newData.name);
-				top = push(top, newData);
-				printf("data berhasil dimasukan!");
-				getch();
+			if (mod == 1) {
+				// ARRAY
+			}
+			else if (mod == 2) {
+				if (isOverflow(top, max))
+					printf("Stack Overflow please pop first!");
+				else {
+					struct Data newData;
+					printf("masukan code: ");
+					scanf("%s", &newData.code);
+					printf("masukan nama: ");
+					scanf("%s", &newData.name);
+					top = push(top, newData);
+					printf("data berhasil dimasukan!");
+					getch();
+				}
 			}
 			break;
 
 		case 2:
-			top = pop(top);
+			if (mod == 1) {}
+			else if (mod == 2)top = pop(top);
 			break;
 
 		case 3:
-			if (isEmpty(top))
-				printf("No Data to Peek!");
-			else {
-				struct Data dataTop = peekTop(top);
-				printf("%s %s \n", dataTop.code, dataTop.name);
+			if (mod == 1) {}
+			else if (mod == 2) {
+				if (isEmpty(top))
+					printf("No Data to Peek!");
+				else {
+					struct Data dataTop = peekTop(top);
+					printf("%s %s \n", dataTop.code, dataTop.name);
+				}
 			}
 			getch();
 			break;
