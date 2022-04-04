@@ -100,6 +100,7 @@ struct Node* destroy(struct Node* top) {
 	return top;
 }
 // ARRAY FUCTIONS
+
 struct Stack* createStack(unsigned capacity) {
 	struct Stack* stack = (struct Stack*)malloc(sizeof(struct Stack));
 	stack->capacity = capacity;
@@ -108,13 +109,9 @@ struct Stack* createStack(unsigned capacity) {
 	return stack;
 }
 int arr_isEmpty(struct Stack* stack) { return stack->top == -1; }
-
 int arr_isFull(struct Stack* stack) { return stack->top == stack->capacity; }
-
 struct Data arr_peek(struct Stack* stack) { return stack->data[stack->top]; }
-
 void arr_pop(struct Stack* stack) { stack->data[stack->top--]; }
-
 void arr_push(struct Stack* stack, struct Data data) {
 	if (arr_isFull(stack))return;
 	stack->data[++stack->top] = data;
