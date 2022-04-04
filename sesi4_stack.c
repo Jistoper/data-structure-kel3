@@ -32,7 +32,7 @@ bool isOverflow(struct Node* top, int max) {
 		while (ptr->next != NULL) {
 			count++;
 			ptr = ptr->next;
-		}
+		}//coba
 		if (count == max)
 			return true;
 		else
