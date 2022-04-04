@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <limits.h>
 #include <conio.h>
 #include <stdbool.h>
 
@@ -7,20 +9,20 @@ struct Data {
 	char code[6];
 	char name[20];
 };
+struct Node {
+	struct Data data;
+	struct Node* next;
+};
 struct Stack {
 	int top;
 	unsigned capacity;
 	struct Data* data;
 };
-struct Node {
-	struct Data data;
-	struct Node* next;
-};
 
 
 // LINKED LIST FUNCTIONS
 bool isEmpty(struct Node* top) { return (top == NULL); }
-bool isFull(struct Node* top, int max) {
+bool isOverflow(struct Node* top, int max) {
 	struct Node* ptr;
 	ptr = top;
 	if (isEmpty(top))
@@ -30,7 +32,7 @@ bool isFull(struct Node* top, int max) {
 		while (ptr->next != NULL) {
 			count++;
 			ptr = ptr->next;
-		}
+		}//coba1
 		if (count == max)
 			return true;
 		else
@@ -97,15 +99,39 @@ struct Node* destroy(struct Node* top) {
 	top = NULL;
 	return top;
 }
-
 // ARRAY FUCTIONS
+struct Stack* createStack(unsigned capacity) {
+	struct Stack* stack = (struct Stack*)malloc(sizeof(struct Stack));
+	stack->capacity = capacity;
+	stack->top = -1;
+	stack->data = (struct Data*)malloc(stack->capacity * sizeof(struct Data));
+	return stack;
+}
+int arr_isEmpty(struct Stack* stack) { return stack->top == -1; }
+
+int arr_isFull(struct Stack* stack) { return stack->top == stack->capacity; }
+
+struct Data arr_peek(struct Stack* stack) { return stack->data[stack->top]; }
+
+void arr_pop(struct Stack* stack) { stack->data[stack->top--]; }
+
+void arr_push(struct Stack* stack, struct Data data) {
+	if (arr_isFull(stack))return;
+	stack->data[++stack->top] = data;
+	printf("%s %s pushed to stack\n", data.code, data.name);
+}
+
 
 
 void menu() {
 	struct Node* top = NULL;
+	struct Stack* stack;
 	int max, pilihan, mod = 2;
+start:
 	printf("Masukkan Max Data : ");
 	scanf("%d", &max);
+	if (mod == 1)
+		stack = createStack(max);
 	while (1) {
 		system("cls");
 		printf("1. Push Data\n");
@@ -119,11 +145,23 @@ void menu() {
 
 		switch (pilihan) {
 		case 1:
+
 			if (mod == 1) {
-				// ARRAY
+				if (arr_isFull(stack))
+					printf("Stack Overflow please pop first!");
+				else {
+					struct Data Input, temp;
+					printf("masukan code: ");
+					scanf("%s", &Input.code);
+					printf("masukan nama: ");
+					scanf("%s", &Input.name);
+					arr_push(stack, Input);
+					printf("data berhasil dimasukan!");
+					getch();
+				}
 			}
 			else if (mod == 2) {
-				if (isFull(top, max))
+				if (isOverflow(top, max))
 					printf("Stack Overflow please pop first!");
 				else {
 					struct Data newData;
@@ -136,15 +174,25 @@ void menu() {
 					getch();
 				}
 			}
+
 			break;
 
-		case 2:
-			if (mod == 1) {}
+		case 2: {
+			if (mod == 1)arr_pop(stack);
 			else if (mod == 2)top = pop(top);
-			break;
+		}
+			  break;
 
 		case 3:
-			if (mod == 1) {}
+			if (mod == 1) {
+				if (arr_isEmpty(stack))
+					printf("No Data to Peek!");
+				else {
+					struct Data temp;
+					temp = arr_peek(stack);
+					printf("%s %s \n", temp.code, temp.name);
+				}
+			}
 			else if (mod == 2) {
 				if (isEmpty(top))
 					printf("No Data to Peek!");
@@ -184,6 +232,7 @@ void menu() {
 						top = destroy(top);
 					}
 					mod = (mod == 1) ? 2 : 1;
+					goto start;
 				}
 				else if (pil == 2)
 					top = destroy(top);
