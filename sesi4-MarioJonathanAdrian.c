@@ -117,7 +117,22 @@ void arr_push(struct Stack* stack, struct Data data) {
 	stack->data[++stack->top] = data;
 	printf("%s %s pushed to stack\n", data.code, data.name);
 }
-
+void viewArray (struct Stack* stack) {
+	if (arr_isEmpty(stack))
+		printf("No Data Found!");
+	else {
+		int index = stack->top;
+		for (int i = 0;i < 25; i++) printf("-");
+		printf("\nNo. | CODE  | Name\n");
+		for (int i = 0; i <= stack->top; i++) {
+			printf("%.2d  | %-5s | %s", i+1, stack->data[index].code, stack->data[index].name);
+			if (index == stack->top) printf("     -> Top");
+			printf("\n");
+			index--;
+		}
+		for (int i = 0;i < 25; i++) printf("-");
+	}
+}
 
 
 void menu() {
@@ -154,7 +169,6 @@ start:
 					scanf("%s", &Input.name);
 					arr_push(stack, Input);
 					printf("data berhasil dimasukan!");
-					getch();
 				}
 			}
 			else if (mod == 2) {
@@ -168,9 +182,9 @@ start:
 					scanf("%s", &newData.name);
 					top = push(top, newData);
 					printf("data berhasil dimasukan!");
-					getch();
 				}
 			}
+			getch();
 
 			break;
 
@@ -202,7 +216,12 @@ start:
 			break;
 
 		case 4:
-			viewData(top);
+			if (mod == 1) {
+				viewArray(stack);
+			}
+			else if (mod == 2) {
+				viewData(top);
+			}
 			getch();
 			break;
 
@@ -223,7 +242,8 @@ start:
 
 				if (pil == 1) {
 					if (mod == 1) {
-						//delete array
+						free(stack);
+						stack->top = -1;
 					}
 					else {
 						top = destroy(top);
@@ -232,7 +252,13 @@ start:
 					goto start;
 				}
 				else if (pil == 2)
-					top = destroy(top);
+					if (mod == 1) {
+						free(stack);
+						stack->top = -1;
+					}
+					else {
+						top = destroy(top);
+					}
 				else if (pil < 0 || pil > 3) {
 					printf("Menu Tidak Ada\n");
 					printf("--Tekan Enter untuk Melanjutkan--");
